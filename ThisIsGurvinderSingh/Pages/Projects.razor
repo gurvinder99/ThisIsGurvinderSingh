@@ -1,0 +1,11 @@
+@page "/projects"
+
+@code {
+    private bool isHovered;
+}
+
+<div class="project-card"
+     @onmouseover="() => isHovered = true" 
+     @onmouseout="() => isHovered = false">
+    <h2 class="@(isHovered ? "hovered" : "")">My Project</h2>
+</div>
