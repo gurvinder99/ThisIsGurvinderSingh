@@ -3,7 +3,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100px;
-    background-color: #fa0000;
-    border-radius: 2%;
+    height: 80vh;
+    background: linear-gradient(45deg, #fa0000, #d45555, #c40101);
+    border-radius: 3%;
+    margin-left: 5%;
+    margin-right: 5%;
 }
