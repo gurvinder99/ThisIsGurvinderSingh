@@ -8,4 +8,176 @@
     border-radius: 3%;
     margin-left: 5%;
     margin-right: 5%;
+    min-height: auto;
+    
+}
+#screen {
+    display: flex;
+    margin-left: 0;
+    
+    margin-right: 10%;
+    height: 70vh;
+    width: 100vh;
+    background-color: #000000;
+    border-radius: inherit;
+}
+/* --- Navigation Dial Styles --- */
+
+/* The main circular container for the dial */
+.navigation-dial {
+    position: relative; /* Essential for positioning inner elements/arrows */
+    /* Responsive sizing: min-size, ideal-size (18vw for 18% of viewport width), max-size */
+    width: clamp(120px, 18vw, 190px);
+    height: clamp(120px, 18vw, 190px);
+    
+    /* Background gradient for the outer circle */
+    background: radial-gradient(circle at center, #FF5252 0%, #D32F2F 100%);
+    
+    border-radius: 50%; /* Makes it a perfect circle */
+    
+    /* CSS Grid for precise placement of the five buttons (up, center, left, right, down) */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns of equal width */
+    grid-template-rows: repeat(3, 1fr);    /* 3 rows of equal height */
+    place-items: center; /* Centers content within each grid cell */
+    
+    border: 4px solid #8B0000; /* Darker red border around the dial */
+    
+    /* Deep inner and outer shadows for a realistic 3D, raised effect */
+    box-shadow: inset 0 5px 12px rgba(0, 0, 0, 0.6), /* Inner shadow */
+                0 5px 10px rgba(0, 0, 0, 0.5); /* Outer shadow */
+                
+    flex-shrink: 0; /* Prevents the dial from shrinking too much in a flex container */
+    /* margin-top might be needed if this is stacked vertically with another element on smaller screens */
+    /* margin-top: 20px; */ 
+}
+
+/* Common styles for all directional navigation buttons */
+.nav-button {
+    background-color: transparent; /* The button areas themselves are transparent */
+    width: 100%; /* Take full width of their grid cell */
+    height: 100%; /* Take full height of their grid cell */
+    display: flex; /* Use flex to center the arrow inside */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Indicates it's clickable */
+    transition: background-color 0.2s ease, transform 0.1s ease; /* Smooth hover effects */
+}
+
+/* Visual feedback on hover for directional buttons */
+.nav-button:hover {
+     /* Subtle white highlight */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+/* Specific Grid Placement for each directional button */
+.nav-up { grid-column: 2 / 3; grid-row: 1 / 2; } /* Top-middle grid cell */
+.nav-left { grid-column: 1 / 2; grid-row: 2 / 3; } /* Middle-left grid cell */
+.nav-right { grid-column: 3 / 4; grid-row: 2 / 3; } /* Middle-right grid cell */
+.nav-down { grid-column: 2 / 3; grid-row: 3 / 4; } /* Bottom-middle grid cell */
+
+/* Styles for the central button */
+.nav-center {
+    grid-column: 2 / 3; /* Middle-middle grid cell */
+    grid-row: 2 / 3;
+    
+    /* Lighter red radial gradient for the center button as seen in the image */
+    background: linear-gradient(45deg, #9404048c, #E63939);
+
+    /* Responsive sizing for the center button */
+    width: clamp(60px, 9vw, 100px);
+    height: clamp(60px, 9vw, 100px);
+    
+    border-radius: 50%; /* Makes it a perfect circle */
+    
+    /* Deep inner shadow for a recessed look and subtle outer glow */
+    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.7),
+                0 0 5px rgba(255,255,255,0.2);
+    border: 2px solid #8B0000; /* Darker red border for the center button */
+    
+    transition: background-color 0.2s ease, transform 0.1s ease; /* Smooth hover effects */
+    cursor: pointer;
+}
+
+/* Visual feedback on hover for the center button */
+.nav-center:hover {
+     /* Lighter gradient on hover */
+    transform: scale(1.01); /* Slightly more pronounced scale on hover */
+}
+
+/* --- Arrows (using CSS triangles as ::before pseudo-elements) --- */
+.nav-button::before {
+    content: ''; /* Required for pseudo-elements */
+    width: 0;
+    height: 0;
+    border-style: solid; /* How the triangle is formed */
+    position: absolute; /* Allows precise positioning relative to its parent .nav-button */
+    border-color: transparent; /* Default to transparent borders */
+    
+    /* Subtle white glow/shadow for the white arrows, as seen in the image */
+    /* filter: drop-shadow(0 0 3px rgba(255,255,255,0.7)); */
+}
+
+/* Up Arrow */
+.nav-up::before {
+    border-width: 0 15px 22px 15px; /* Top arrow: base at bottom, pointed up */
+    border-color: transparent transparent #ffffff transparent; /* Only bottom border is white */
+    transform: translateY(-12px); /* Adjust vertical position to place it accurately */
+}
+
+/* Down Arrow */
+.nav-down::before {
+    border-width: 22px 15px 0 15px; /* Bottom arrow: base at top, pointed down */
+    border-color: #ffffff transparent transparent transparent; /* Only top border is white */
+    transform: translateY(12px); /* Adjust vertical position */
+}
+
+/* Left Arrow */
+.nav-left::before {
+    border-width: 15px 22px 15px 0; /* Left arrow: base on right, pointed left */
+    border-color: transparent #ffffff transparent transparent; /* Only right border is white */
+    transform: translateX(-12px); /* Adjust horizontal position */
+}
+
+/* Right Arrow */
+.nav-right::before {
+    border-width: 15px 0 15px 22px; /* Right arrow: base on left, pointed right */
+    border-color: transparent transparent transparent #ffffff; /* Only left border is white */
+    transform: translateX(12px); /* Adjust horizontal position */
+}
+
+/* --- Media Queries for responsiveness (optional for standalone dial) --- */
+/* These will adjust the dial size on smaller screens if you integrate it into a larger responsive layout */
+@media (max-width: 600px) {
+    .navigation-dial {
+        width: clamp(110px, 20vw, 150px);
+        height: clamp(110px, 20vw, 150px);
+    }
+
+    .nav-center {
+        width: clamp(45px, 8vw, 80px);
+        height: clamp(45px, 8vw, 80px);
+    }
+
+    .nav-button::before {
+        border-width: 0 10px 15px 10px; /* Smaller arrows */
+        transform: translateY(-8px);
+    }
+    .nav-down::before {
+        border-width: 15px 10px 0 10px;
+        transform: translateY(8px);
+    }
+    .nav-left::before {
+        border-width: 10px 15px 10px 0;
+        transform: translateX(-8px);
+    }
+    .nav-right::before {
+        border-width: 10px 0 10px 15px;
+        transform: translateX(8px);
+    }
+}
+h1 {
+    text-align: center;
+    color: #ffffff;
+    font-size: 2em;
 }
