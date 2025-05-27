@@ -3,35 +3,513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <title>GURVINDER | Full Stack Developer & Filmmaker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --primary: #FF5E1A;
+            --primary-dark: #E04E00;
+            --secondary: #FF1A4B;
+            --dark: #0A0A0A;
+            --light: #F0F0F0;
+            --gray: #1E1E1E;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            mix-blend-mode: difference;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        section {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 30px;
+            right: 40px;
+            z-index: 100;
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            padding: 5px 0;
+            overflow: hidden;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--primary);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            transform: translateX(0);
+        }
+        
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+        
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 12vw;
+            line-height: 0.9;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--light);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+        
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .hero-scroll-text {
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--light);
+            opacity: 0.7;
+        }
+        
+        .hero-scroll-line {
+            width: 1px;
+            height: 60px;
+            background-color: var(--light);
+            opacity: 0.7;
+        }
+        
+        /* About Section */
+        .about {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10%;
+        }
+        
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5rem;
+            letter-spacing: 3px;
+            color: var(--primary);
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+        
+        /* Photo Grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+        
+        .photo-item {
+            aspect-ratio: 1;
+            background-color: var(--gray);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Facts Section */
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .fact-card {
+            background-color: var(--gray);
+            padding: 40px;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fact-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .fact-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--light);
+        }
+        
+        /* Footer */
+        .footer {
+            width: 100%;
+            padding: 60px 10%;
+            background-color: var(--gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .footer-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 3px;
+            color: var(--light);
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 40px;
+        }
+        
+        .footer-link {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--primary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 15vw;
+            }
+            
+            .section-title {
+                font-size: 3rem;
+            }
+            
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .facts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                top: 20px;
+                right: 20px;
+                gap: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div id="plate">
-
-        <div id="screen">
-            <h2>This is    </h2>
-            <br>
-            <h1>Gurvinder Singh</h1>
-        </div>
-
-        <div class="mp3-player-container">
-            <div class="display-area">
-
-
-
+    <div class="cursor"></div>
+    
+    <nav class="nav">
+        <a href="#" class="nav-link">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+    
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <h1 class="hero-title">GURVINDER Singh</h1>
+            <p class="hero-subtitle">Full Stack Developer & aspiring Filmmaker</p>
+            <div class="hero-scroll">
+                <div class="hero-scroll-line"></div>
+                <p class="hero-scroll-text">Scroll</p>
             </div>
-
-    <div class="navigation-dial">
-        <div class="nav-button nav-up" aria-label="Up"></div>
-        <div class="nav-center" aria-label="Select"></div>
-        <div class="nav-button nav-left" aria-label="Left"></div>
-        <div class="nav-button nav-right" aria-label="Right"></div>
-        <div class="nav-button nav-down" aria-label="Down"></div>
-    </div>
-</div>
+        </section>
+        
+        <!-- About Section -->
+        <section class="about" id="about">
+            <h2 class="section-title">About Me</h2>
+            
+            <!-- Photo Grid -->
+            <div class="photo-grid">
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1604964432806-254d07c11f32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Coding">
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Filmmaking">
+                </div>
+                <div class="photo-item">
+                    <img src="https://images.unsplash.com/photo-1633613286848-e6f43bbafb8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Anime">
+                </div>
+            </div>
+            
+            <h2 class="section-title">Did You Know?</h2>
+            
+            <div class="facts-grid">
+                <div class="fact-card">
+                    <h3 class="fact-number">01</h3>
+                    <p class="fact-text">I've directed short films inspired by my favorite anime aesthetics, blending cinematic techniques with animation styles.</p>
+                </div>
+                <div class="fact-card">
+                    <h3 class="fact-number">02</h3>
+                    <p class="fact-text">I can analyze a film's plot structure and predict twists with 85% accuracy - my friends call me the "spoiler alert".</p>
+                </div>
+                <div class="fact-card">
+                    <h3 class="fact-number">03</h3>
+                    <p class="fact-text">My coding sessions are often accompanied by film soundtracks - Hans Zimmer gets my JavaScript flowing.</p>
+                </div>
+                <div class="fact-card">
+                    <h3 class="fact-number">04</h3>
+                    <p class="fact-text">I once built a full-stack app in 48 hours fueled entirely by chai and the Lord of the Rings extended editions.</p>
+                </div>
+                <div class="fact-card">
+                    <h3 class="fact-number">05</h3>
+                    <p class="fact-text">My dream project is to develop an interactive anime platform with community-driven storytelling elements.</p>
+                </div>
+                <div class="fact-card">
+                    <h3 class="fact-number">06</h3>
+                    <p class="fact-text">I approach UI design like film composition - every element needs proper framing and visual hierarchy.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section class="footer" id="contact">
+            <h3 class="footer-title">Let's Create Together</h3>
+            <div class="footer-links">
+                <a href="mailto:hello@gurvinder.dev" class="footer-link">Email</a>
+                <a href="https://github.com/gurvinder-dev" target="_blank" class="footer-link">GitHub</a>
+            </div>
+        </section>
     </div>
     
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Register GSAP plugins
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Cursor effect
+            const cursor = document.querySelector('.cursor');
+            
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.1,
+                    ease: "power2.out"
+                });
+            });
+            
+            // Hover effects
+            document.querySelectorAll('a, .photo-item, .fact-card').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    gsap.to(cursor, { scale: 2, duration: 0.3 });
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    gsap.to(cursor, { scale: 1, duration: 0.3 });
+                });
+            });
+            
+            // Hero animations
+            const heroTitle = document.querySelector('.hero-title');
+            const heroSubtitle = document.querySelector('.hero-subtitle');
+            
+            gsap.from([heroTitle, heroSubtitle], {
+                duration: 1.5,
+                y: 50,
+                opacity: 0,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+            
+            // Scroll animations
+            gsap.utils.toArray('.section-title').forEach(title => {
+                gsap.from(title, {
+                    scrollTrigger: {
+                        trigger: title,
+                        start: "top 80%",
+                        toggleActions: "play none none none"
+                    },
+                    x: -50,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power2.out"
+                });
+                
+                gsap.from(title.querySelector('::after'), {
+                    scrollTrigger: {
+                        trigger: title,
+                        start: "top 80%",
+                        toggleActions: "play none none none"
+                    },
+                    scaleX: 1,
+                    duration: 1.2,
+                    ease: "power3.out"
+                });
+            });
+            
+            // Photo grid animation
+            gsap.utils.toArray('.photo-item').forEach((item, i) => {
+                gsap.from(item, {
+                    scrollTrigger: {
+                        trigger: item,
+                        start: "top 90%",
+                        toggleActions: "play none none none"
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.6,
+                    delay: i * 0.1,
+                    ease: "back.out(1.7)"
+                });
+            });
+            
+            // Facts animation
+            gsap.utils.toArray('.fact-card').forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 90%",
+                        toggleActions: "play none none none"
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.6,
+                    delay: i * 0.1,
+                    ease: "back.out(1.7)"
+                });
+            });
+            
+            // Footer animation
+            gsap.from('.footer-title', {
+                scrollTrigger: {
+                    trigger: '.footer',
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+            
+            gsap.from('.footer-link', {
+                scrollTrigger: {
+                    trigger: '.footer',
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                },
+                y: 20,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out"
+            });
+        });
+    </script>
 </body>
 </html>
