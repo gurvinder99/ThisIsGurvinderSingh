@@ -301,13 +301,20 @@
                 grid-template-columns: 1fr;
             }
             
-            .nav {
-                top: 20px;
-                right: 20px;
-                gap: 15px;
-            }
-        }
-    </style>
+    .nav {
+        top: 20px;
+        right: 20px;
+        gap: 15px;
+    }
+
+
+    .fact-card {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+}
+</style>
 </head>
 <body>
     <div class="cursor"></div>
@@ -467,6 +474,53 @@
                     ease: "back.out(1.7)"
                 });
             });
+
+
+// Enhanced Fact Card Hover Animation
+gsap.utils.toArray('.fact-card').forEach(card => {
+    // Create border element
+    const border = document.createElement('div');
+    border.style.position = 'absolute';
+    border.style.top = '0';
+    border.style.left = '0';
+    border.style.width = '100%';
+    border.style.height = '100%';
+    border.style.border = '1px solid var(--primary)';
+    border.style.borderRadius = '5px';
+    border.style.opacity = '0';
+    card.appendChild(border);
+    
+    // Set initial state
+    gsap.set(card, { transformOrigin: "center", position: "relative" });
+    gsap.set(border, { scale: 0.9 });
+    
+    // Hover animation
+    card.addEventListener('mouseenter', () => {
+        gsap.to(card, {
+            scale: 1.02,
+            duration: 0.3,
+            ease: "power2.out"
+        });
+        gsap.to(border, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.4,
+            ease: "power2.out"
+        });
+    });
+    
+    card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+            scale: 1,
+            duration: 0.3
+        });
+        gsap.to(border, {
+            opacity: 0,
+            scale: 0.9,
+            duration: 0.4
+        });
+    });
+});
             
             // Facts animation
             gsap.utils.toArray('.fact-card').forEach((card, i) => {
@@ -483,6 +537,9 @@
                     ease: "back.out(1.7)"
                 });
             });
+
+
+
             
             // Footer animation
             gsap.from('.footer-title', {
