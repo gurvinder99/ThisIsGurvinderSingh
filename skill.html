@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gurvinder | Skills</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --deep-blue: #0a2342;
+            --teal: #2ca58d;
+            --pearl: #f7f7f2;
+            --coral: #ff6b6b;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--deep-blue);
+            color: var(--pearl);
+            overflow-x: hidden;
+        }
+
+        /* Interactive Background */
+        .interactive-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, var(--deep-blue) 0%, #051a30 100%);
+            z-index: -2;
+        }
+
+        .bg-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(44,165,141,0.3) 0%, rgba(44,165,141,0) 70%);
+            filter: blur(5px);
+        }
+
+        /* Glass Navigation */
+        .glass-nav {
+            position: fixed;
+            top: 2rem;
+            right: 3rem;
+            display: flex;
+            gap: 2rem;
+            z-index: 100;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .nav-link {
+            color: var(--pearl);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--teal);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--teal);
+        }
+
+        /* Main Scroll Container */
+        .scroll-container {
+            width: 100%;
+            position: relative;
+        }
+
+        /* Hero Section */
+        .aquatic-hero {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            padding: 0 2rem;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            margin-bottom: 1.5rem;
+            color: var(--pearl);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--teal);
+            margin-bottom: 3rem;
+        }
+
+        /* Floating Elements (Foreground) */
+        .foreground-element {
+            position: absolute;
+            z-index: 3;
+            opacity: 0.8;
+        }
+
+        /* Skill Cards (Midground) */
+        .skill-section {
+            min-height: 100vh;
+            padding: 10rem 10%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .skill-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 4rem;
+            margin-bottom: 5rem;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(44, 165, 141, 0.1), transparent);
+            z-index: -1;
+        }
+
+        .skill-index {
+            font-size: 1rem;
+            color: var(--coral);
+            margin-bottom: 1rem;
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 30px;
+            border: 1px solid var(--coral);
+        }
+
+        .skill-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 2rem;
+            color: var(--pearl);
+        }
+
+        .skill-desc {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--pearl);
+            max-width: 800px;
+            opacity: 0.9;
+        }
+
+        /* Background Elements */
+        .background-element {
+            position: absolute;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        /* Contact Section */
+        .aquatic-contact {
+            min-height: 100vh;
+            padding: 10rem 10%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            margin-bottom: 3rem;
+            color: var(--pearl);
+        }
+
+        .contact-link {
+            color: var(--pearl);
+            font-size: 1.2rem;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid var(--coral);
+            border-radius: 30px;
+            transition: all 0.3s;
+            margin: 0 1rem;
+        }
+
+        .contact-link:hover {
+            background: rgba(255, 107, 107, 0.4);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .glass-nav {
+                top: 1rem;
+                right: 1rem;
+                padding: 0.8rem 1.5rem;
+                gap: 1rem;
+            }
+            
+            .skill-card {
+                padding: 3rem 2rem;
+            }
+            
+            .contact-link {
+                margin: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Interactive Background -->
+    <div class="interactive-bg" id="interactiveBg"></div>
+
+    <!-- Glass Navigation -->
+    <nav class="glass-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="skills.html" class="nav-link active">Skills</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+    </nav>
+
+    <!-- Main Scroll Container -->
+    <div class="scroll-container">
+        <!-- Hero Section -->
+        <section class="aquatic-hero">
+            <!-- Foreground Elements -->
+            <div class="foreground-element" style="top:20%; left:10%; width:100px; height:100px; background:radial-gradient(circle, var(--teal) 0%, transparent 70%); border-radius:50%; filter:blur(5px);"></div>
+            <div class="foreground-element" style="top:70%; left:80%; width:150px; height:150px; background:radial-gradient(circle, var(--coral) 0%, transparent 70%); border-radius:50%; filter:blur(10px);"></div>
+            
+            <div class="hero-content">
+                <h1 class="hero-title">My Skills</h1>
+                <p class="hero-subtitle">Diving deep into my capabilities</p>
+            </div>
+            
+            <!-- Background Elements -->
+            <div class="background-element" style="bottom:10%; left:5%; width:200px; height:200px; background:radial-gradient(circle, rgba(44,165,141,0.2) 0%, transparent 70%); border-radius:50%; filter:blur(10px);"></div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="skill-section">
+            <!-- Unique Design -->
+            <div class="skill-card">
+                <span class="skill-index">01</span>
+                <h2 class="skill-name">Unique Design</h2>
+                <p class="skill-desc">
+                    My design approach flows like water - adapting to any container while maintaining its essence. 
+                    I create interfaces with the depth of the ocean and the clarity of a mountain spring.
+                </p>
+            </div>
+
+            <!-- GSAP Animation -->
+            <div class="skill-card">
+                <span class="skill-index">02</span>
+                <h2 class="skill-name">GSAP Animation</h2>
+                <p class="skill-desc">
+                    Animations that move with the fluidity of underwater currents. I specialize in creating 
+                    motion that feels organic and purposeful, enhancing the user experience without overwhelming it.
+                </p>
+            </div>
+
+            <!-- C# Development -->
+            <div class="skill-card">
+                <span class="skill-index">03</span>
+                <h2 class="skill-name">C# Development</h2>
+                <p class="skill-desc">
+                    Building robust systems with the precision of coral formations. My backend architecture 
+                    is as structured as a reef ecosystem, providing stability and flexibility in equal measure.
+                </p>
+            </div>
+
+            <!-- JavaScript -->
+            <div class="skill-card">
+                <span class="skill-index">04</span>
+                <h2 class="skill-name">JavaScript</h2>
+                <p class="skill-desc">
+                    Code that adapts like marine life to its environment. I create applications that are 
+                    as responsive as the tide, with architectures that scale like schools of fish.
+                </p>
+            </div>
+
+            <!-- HTML/CSS -->
+            <div class="skill-card">
+                <span class="skill-index">05</span>
+                <h2 class="skill-name">HTML/CSS</h2>
+                <p class="skill-desc">
+                    Semantic structures with the beauty of seashell patterns. My CSS is as clear as 
+                    tropical waters, with layers of depth that reveal more the closer you look.
+                </p>
+            </div>
+
+            <!-- AI Prompting -->
+            <div class="skill-card">
+                <span class="skill-index">06</span>
+                <h2 class="skill-name">AI Prompting</h2>
+                <p class="skill-desc">
+                    Guiding AI outputs with the precision of an oceanographer predicting currents. 
+                    My techniques produce results that are both technically sound and creatively inspired.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="aquatic-contact">
+            <h2 class="contact-title">Ready to Dive In?</h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 3rem;">
+                <a href="mailto:hello@gurvinder.dev" class="contact-link">Email Me</a>
+                <a href="https://github.com/gurvinder-dev" target="_blank" class="contact-link">My GitHub</a>
+            </div>
+            
+            <!-- Background Elements -->
+            <div class="background-element" style="top:20%; right:10%; width:300px; height:300px; background:radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 70%); border-radius:50%; filter:blur(15px);"></div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Register GSAP plugins
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Create interactive background bubbles
+            const bg = document.getElementById('interactiveBg');
+            for (let i = 0; i < 20; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bg-bubble');
+                
+                const size = Math.random() * 200 + 50;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const opacity = Math.random() * 0.3 + 0.1;
+                
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${x}%`;
+                bubble.style.top = `${y}%`;
+                bubble.style.opacity = opacity;
+                
+                bg.appendChild(bubble);
+            }
+
+            // Mouse move effects
+            document.addEventListener('mousemove', (e) => {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                // Move background slightly
+                gsap.to('.interactive-bg', {
+                    backgroundPosition: `${x * 20}px ${y * 20}px`,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+                
+                // Move bubbles opposite to mouse
+                gsap.to('.bg-bubble', {
+                    x: -e.movementX * 0.5,
+                    y: -e.movementY * 0.5,
+                    duration: 2,
+                    ease: "power2.out"
+                });
+            });
+
+            // Scroll-triggered animations with different speeds
+            gsap.utils.toArray('.foreground-element').forEach(el => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: '.scroll-container',
+                        start: "top top",
+                        end: "bottom bottom",
+                        scrub: true
+                    },
+                    y: 200,
+                    ease: "none"
+                });
+            });
+
+            gsap.utils.toArray('.background-element').forEach(el => {
+                gsap.to(el, {
+                    scrollTrigger: {
+                        trigger: '.scroll-container',
+                        start: "top top",
+                        end: "bottom bottom",
+                        scrub: true
+                    },
+                    y: 50,
+                    ease: "none"
+                });
+            });
+
+            // Skill cards animations
+            gsap.utils.toArray('.skill-card').forEach((card, i) => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 80%",
+                        end: "top 50%",
+                        toggleActions: "play none none none"
+                    },
+                    y: 100,
+                    opacity: 0,
+                    duration: 0.8,
+                    delay: i * 0.1,
+                    ease: "back.out(1.7)"
+                });
+
+                // Tilt effect on hover
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    gsap.to(card, {
+                        rotationY: ((x - centerX) / centerX) * 5,
+                        rotationX: ((centerY - y) / centerY) * -5,
+                        transformPerspective: 1000,
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        rotationY: 0,
+                        rotationX: 0,
+                        duration: 0.7,
+                        ease: "elastic.out(1, 0.5)"
+                    });
+                });
+            });
+
+            // Hero section animations
+            gsap.from('.hero-title', {
+                scrollTrigger: {
+                    trigger: '.aquatic-hero',
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true
+                },
+                y: 100,
+                opacity: 0,
+                ease: "none"
+            });
+
+            gsap.from('.hero-subtitle', {
+                scrollTrigger: {
+                    trigger: '.aquatic-hero',
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true
+                },
+                y: 100,
+                opacity: 0,
+                delay: 0.2,
+                ease: "none"
+            });
+
+            // Contact section animations
+            gsap.from('.contact-title', {
+                scrollTrigger: {
+                    trigger: '.aquatic-contact',
+                    start: "top bottom",
+                    end: "top center",
+                    scrub: true
+                },
+                y: 100,
+                opacity: 0,
+                ease: "power2.out"
+            });
+
+            gsap.from('.contact-link', {
+                scrollTrigger: {
+                    trigger: '.aquatic-contact',
+                    start: "top bottom",
+                    end: "top center",
+                    scrub: true
+                },
+                y: 50,
+                opacity: 0,
+                stagger: 0.1,
+                ease: "power2.out"
+            });
+        });
+    </script>
+</body>
+</html>
